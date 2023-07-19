@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Bootstrap demo</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body>
+    <div class="px-3 py-4">
+      <div class="row">
+        <div class="col-8">
+          <h1>Pilih Produk!</h1>
+          <div class="row">
+            <div class="col-4 py-4">
+              <div class="card" style="width: 15rem">
+                <img src="../aplikasi/img/Frame 1.png" class="card-img-top" alt="..." />
+                <div class="p-3">
+                  <div class="d-flex justify-content-between">
+                    <h5 class="card-title">Nike Legend Essential 2</h5>
+                    <h5 class="card-title">Rp.399k</h5>
+                  </div>
+                  <button
+                    class="btn btn-primary"
+                    type="button"
+                    onclick="tambahKeranjang('Nike Legend Essential 2', 399000)"
+                  >
+                    Tambah Keranjang
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="col-4 py-4">
+              <div class="card" style="width: 15rem">
+                <img src="../aplikasi/img/Frame 2.png" class="card-img-top" alt="..." />
+                <div class="p-3">
+                  <div class="d-flex justify-content-between">
+                    <h5 class="card-title">Nike SuperRep Go</h5>
+                    <h5 class="card-title">Rp.899k</h5>
+                  </div>
+                  <button
+                    class="btn btn-primary"
+                    type="button"
+                    onclick="tambahKeranjang('Nike SuperRep Go', 899000)"
+                  >
+                    Tambah Keranjang
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="col-4 py-4">
+              <div class="card" style="width: 15rem">
+                <img src="../aplikasi/img/Frame 3.png" class="card-img-top" alt="..." />
+                <div class="p-3">
+                  <div class="d-flex justify-content-between">
+                    <h5 class="card-title">Nike Black and White Basketball Shoe</h5>
+                    <h5 class="card-title">Rp.399k</h5>
+                  </div>
+                  <button
+                    class="btn btn-primary"
+                    type="button"
+                    onclick="tambahKeranjang('Nike Black and White Basketball Shoe', 399000)"
+                  >
+                    Tambah Keranjang
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="col-4 py-4">
+              <div class="card" style="width: 15rem">
+                <img src="../aplikasi/img/Frame 4.png" class="card-img-top" alt="..." />
+                <div class="p-3">
+                  <div class="d-flex justify-content-between">
+                    <h5 class="card-title">Nike Benassi JDI Slide</h5>
+                    <h5 class="card-title">Rp.199k</h5>
+                  </div>
+                  <button
+                    class="btn btn-primary"
+                    type="button"
+                    onclick="tambahKeranjang('Nike Benassi JDI Slide', 199000)"
+                  >
+                    Tambah Keranjang
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-4 py-4">
+          <h1>Payment</h1>
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Nama Produk</th>
+                  <th>Harga Satuan</th>
+                  <th>Jumlah</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody class="struk"></tbody>
+            </table>
+          </div>
+          <h4>Total: <span id="total">0</span></h4>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function tambahKeranjang(nama, harga) {
+        const struk = document.querySelector(".struk");
+        const produk = struk.querySelectorAll("tr");
+        let jumlah = 1;
+        let total = parseInt(document.getElementById("total").textContent.replace(/[^\d]/g, ""));
+
+        for (let i = 0; i < produk.length; i++) {
+          if (produk[i].cells[0].textContent === nama) {
+            const jumlahCell = produk[i].cells[2];
+            jumlah = parseInt(jumlahCell.textContent) + 1;
+            jumlahCell.textContent = jumlah;
+            total += harga;
+            document.getElementById("total").textContent = total;
+            return;
+          }
+        }
+
+        const newRow = struk.insertRow();
+        const namaCell = newRow.insertCell();
+        namaCell.textContent = nama;
+        const hargaCell = newRow.insertCell();
+        hargaCell.textContent = harga;
+        const jumlahCell = newRow.insertCell();
+        jumlahCell.textContent = jumlah;
+        const hapusCell = newRow.insertCell();
+
+        const hapusButton = document.createElement("button");
+        hapusButton.classList.add("btn", "btn-danger", "btn-sm");
+        hapusButton.textContent = "Hapus";
+        hapusButton.addEventListener("click", function () {
+          hapusBarang(newRow, harga);
+        });
+        hapusCell.appendChild(hapusButton);
+
+        total += harga;
+        document.getElementById("total").textContent = total;
+
+        const table = document.querySelector(".table-responsive");
+        table.style.display = "block";
+      }
+
+      function hapusBarang(row, harga) {
+        const jumlahCell = row.cells[2];
+        let jumlah = parseInt(jumlahCell.textContent);
+
+        if (jumlah > 1) {
+          jumlahCell.textContent = jumlah - 1;
+        } else {
+          const struk = document.querySelector(".struk");
+          struk.deleteRow(row.rowIndex);
+        }
+
+        let total = parseInt(document.getElementById("total").textContent.replace(/[^\d]/g, ""));
+        total -= harga;
+        document.getElementById("total").textContent = total;
+
+        if (struk.rows.length === 0) {
+          const table = document.querySelector(".table-responsive");
+          table.style.display = "none";
+        }
+      }
+
+      function formatRupiah(number) {
+        return new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR" }).format(
+          number || 0
+        );
+      }
+    </script>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
